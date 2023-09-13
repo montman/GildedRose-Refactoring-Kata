@@ -1,79 +1,14 @@
-export abstract class Item {
-  constructor(public name, public sellIn, public quality){}
-  abstract updateQuality();
-}
-
-export class StandardItem  extends Item{
-
-  updateQuality() {
-    if (this.quality > 0) {
-      this.quality--;
-      if(this.sellIn<=0){
-        this.quality--;
-      }
-    }
-    this.sellIn--;
-  }
-  
-}
+import { Item } from "./items-model";
 
 export class GildedRose {
   items: Array<Item>;
 
   constructor(items = [] as Array<Item>) {
-    this.items = items;
+    this.items = items.map(it => Item.createItem(it));
   }
 
-  updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      //standart item decrease
-      if (this.items[i].name != 'Aged Brie' && this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-        if (this.items[i].quality > 0) {
-          if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-            this.items[i].quality = this.items[i].quality - 1
-          }
-        }
-      }
-      //case Aged Brie || Backstage
-      else {
-        if (this.items[i].quality < 50) {
-          this.items[i].quality = this.items[i].quality + 1
-          if (this.items[i].name == 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].sellIn < 11) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
-              }
-            }
-            if (this.items[i].sellIn < 6) {
-              if (this.items[i].quality < 50) {
-                this.items[i].quality = this.items[i].quality + 1
-              }
-            }
-          }
-        }
-      }
-      if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-      if (this.items[i].sellIn < 0) {
-        if (this.items[i].name != 'Aged Brie') {
-          if (this.items[i].name != 'Backstage passes to a TAFKAL80ETC concert') {
-            if (this.items[i].quality > 0) {
-              if (this.items[i].name != 'Sulfuras, Hand of Ragnaros') {
-                this.items[i].quality = this.items[i].quality - 1
-              }
-            }
-          } else {
-            this.items[i].quality = this.items[i].quality - this.items[i].quality
-          }
-        } else {
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1
-          }
-        }
-      }
-    }
-
-    return this.items;
+  updateQuality(): Array<Item> {
+    this.items.forEach(item => item.updateQuality());
+    return this.items
   }
 }

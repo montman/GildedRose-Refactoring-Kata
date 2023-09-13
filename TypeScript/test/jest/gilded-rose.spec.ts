@@ -1,34 +1,35 @@
-import { Item, GildedRose, StandardItem } from '@/gilded-rose';
+import { GildedRose } from '@/gilded-rose';
+import { Item } from '@/items-model';
 
 describe('Gilded Rose', () => {
   it('Stardard item quality must decrease by one', () => {
-    const gildedRose = new GildedRose([new StandardItem('Cards', 10, 20)]);
+    const gildedRose = new GildedRose([new Item('Cards', 10, 20)]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(19);
   });
 
   it('Stardard item quality must NOT decrease by one if quality is already zero', () => {
-    const gildedRose = new GildedRose([new StandardItem('Cards', 10, 0)]);
+    const gildedRose = new GildedRose([new Item('Cards', 10, 0)]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(0);
   });
 
   it('Standart item quality must decrese twice if sellIn days are passed', () => {
-    const gildedRose = new GildedRose([new StandardItem('Cards', 0, 20)]);
+    const gildedRose = new GildedRose([new Item('Cards', 0, 20)]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(18);
   });
 
   it('Stardard item quality must NOT decrease by one if quality is already zero and sellId days are passed', () => {
-    const gildedRose = new GildedRose([new StandardItem('Cards', 0, 0)]);
+    const gildedRose = new GildedRose([new Item('Cards', 0, 0)]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(0);
   });
 
   it('Stardard item and Aged Brie sellIn must decrease by one', () => {
-    const gildedRose = new GildedRose([new StandardItem('Cards', 10, 22),new Item('Aged Brie', 20, 11)]);
+    const gildedRose = new GildedRose([new Item('Cards', 10, 22), new Item('Aged Brie', 20, 11)]);
     const items = gildedRose.updateQuality();
-    expect(items.map(e=>e.sellIn)).toStrictEqual([9,19]);
+    expect(items.map(e => e.sellIn)).toStrictEqual([9, 19]);
   });
 
   it('Aged brie quality must increase by one', () => {
@@ -70,14 +71,25 @@ describe('Gilded Rose', () => {
   it('The quality of Sulfuras must not decrease', () => {
     const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 10, 47)]);
     const items = gildedRose.updateQuality();
-    expect(items[0].quality).toBe(47);
+    expect(items[0].quality).toBe(80);
   });
 
   it('The quality of Sulfuras must not decrease if the sellIn days are passed', () => {
     const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 0, 47)]);
     const items = gildedRose.updateQuality();
-    expect(items[0].quality).toBe(47);
+    expect(items[0].quality).toBe(80);
   });
 
+  it('The quality of Conjured must decrease by 2', () => {
+    const gildedRose = new GildedRose([new Item('Conjured', 6, 47)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(45);
+  });
+
+  it('The quality of Conjured must decrease by 4 if days are passed', () => {
+    const gildedRose = new GildedRose([new Item('Conjured', 0, 5)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(1);
+  });
 
 });
