@@ -1,13 +1,20 @@
-export class Item {
-  name: string;
-  sellIn: number;
-  quality: number;
+export abstract class Item {
+  constructor(public name, public sellIn, public quality){}
+  abstract updateQuality();
+}
 
-  constructor(name, sellIn, quality) {
-    this.name = name;
-    this.sellIn = sellIn;
-    this.quality = quality;
+export class StandardItem  extends Item{
+
+  updateQuality() {
+    if (this.quality > 0) {
+      this.quality--;
+      if(this.sellIn<=0){
+        this.quality--;
+      }
+    }
+    this.sellIn--;
   }
+  
 }
 
 export class GildedRose {
