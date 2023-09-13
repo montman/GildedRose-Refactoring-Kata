@@ -25,6 +25,12 @@ describe('Gilded Rose', () => {
     expect(items[0].quality).toBe(0);
   });
 
+  it('Stardard item and Aged Brie sellIn must decrease by one', () => {
+    const gildedRose = new GildedRose([new Item('Cards', 10, 22),new Item('Aged Brie', 20, 11)]);
+    const items = gildedRose.updateQuality();
+    expect(items.map(e=>e.sellIn)).toStrictEqual([9,19]);
+  });
+
   it('Aged brie quality must increase by one', () => {
     const gildedRose = new GildedRose([new Item('Aged Brie', 10, 20)]);
     const items = gildedRose.updateQuality();
@@ -60,4 +66,18 @@ describe('Gilded Rose', () => {
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(0);
   });
+
+  it('The quality of Sulfuras must not decrease', () => {
+    const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 10, 47)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(47);
+  });
+
+  it('The quality of Sulfuras must not decrease if the sellIn days are passed', () => {
+    const gildedRose = new GildedRose([new Item('Sulfuras, Hand of Ragnaros', 0, 47)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(47);
+  });
+
+
 });
